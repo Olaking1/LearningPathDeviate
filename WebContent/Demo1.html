@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>
+		用户登录
+	</title>
+</head>
+<body>
+	<form action="" method="get" id="demoForm">
+		请输入用户名</br>
+		<input type="text" name="userid" id="userid" value="" size="20"></input></br>
+		请输入密码</br>
+		<input type="password" name="password" id="password" value="" size="20"></input></br>
+		<input type="submit" name="submit" id="submit" value="登录">
+	</form>
+	
+	<script src="jquery/jquery-2.1.4.js"></script>
+	<script src="jquery/jquery.validate.js"></script>
+	<script>
+		$(document).ready(function(){
+			$("#demoForm").validate({
+				rules:{
+					userid:{
+						required:true,
+						minlength:2,
+						maxlength:10
+					}	
+				},
+			});
+		});
+	</script>
+</body>
+</html>

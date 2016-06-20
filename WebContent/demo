@@ -1,0 +1,126 @@
+package receiveAndSend;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
+
+public class MSBean {
+
+	static String map = "";
+	static String w = "";
+	private String[] vertices;
+	private int[][] weight;
+	private String[] path;
+	static String targetLabel;
+	private LinkedHashMap listOptimal;
+	private String[] optimalArray;
+
+	public MSBean() {
+		this.vertices = ContractDB.path.split("\\*");
+		optimalArray = ContractDB.optimalArray;
+		this.path = ContractDB.learningPath;
+		listOptimal = ContractDB.optimalList;
+		this.targetLabel = ContractDB.optimalArray[ContractDB.optimalArray.length - 1];
+
+		transformMap();
+	}
+
+	private String transformMap() {
+
+		// 自己路径
+		if (path != null) {
+			for (int m = 0; m < path.length - 1; m++) {
+				if (listOptimal.containsKey(path[m])) {
+					if (!path[m].equals(path[m + 1])) {
+						int k = Integer.parseInt(String.valueOf(path[m]));
+						int n = Integer.parseInt(String.valueOf(path[m + 1]));
+
+						if (k < vertices.length && n < vertices.length
+								&& k >= 0 && n >= 0) {
+							map += "{source: '" + vertices[k] + "', target: '"
+									+ vertices[n] + "', weight:1},";
+						}
+					}
+				} else {
+					map += "{source: '" + path[path.length - 2]
+							+ "', target: '" + path[path.length - 1]
+							+ "', weight:1},";
+					w += "{category:4, name: '" + path[path.length - 1]
+							+ "',value : 2},";
+				}
+
+			}
+
+			for (int j = 0; j < path.length; j++) {
+				int k = Integer.parseInt(path[j]);
+
+				if (k < vertices.length && k >= 0 && vertices[k] != targetLabel
+						&& !listOptimal.containsKey(k)) {
+					if (j > 0 && !path[j].equals(path[j - 1])) {
+						w += "{category:3, name: '" + vertices[k]
+								+ "',value : 2},";
+					} else if (j == 0) {
+						w += "{category:3, name: '" + vertices[k]
+								+ "',value : 2},";
+					}
+				}
+
+			}
+
+			List<String> listPath = Arrays.asList(path);
+			// 在找不到最优路径时，path为空
+			if (optimalArray.length != 0) {
+
+				// 推荐路径
+				for (int i = 0; i < optimalArray.length - 1; i++) {
+
+					int k = Integer.parseInt(optimalArray[i]);
+					int n = Integer.parseInt(optimalArray[i + 1]);
+					if (k < vertices.length && k >= 0 && n < vertices.length
+							&& n >= 0) {
+						map += "{source: '"
+								+ vertices[k]
+								+ "', target: '"
+								+ vertices[n]
+								+ "', weight:2,  itemStyle: {normal: {width: 1.5,color: 'red'}}},";
+
+						for (int j = 0; j < optimalArray.length; j++) {
+							if (vertices[Integer.parseInt(optimalArray[j])] != targetLabel)
+								w += "{category:2, name: '"
+										+ vertices[Integer
+												.parseInt(optimalArray[j])]
+										+ "',value : 3},";
+						}
+					}
+				}
+			}
+
+			// 一般结点,排除最优路径结点和已学习结点
+//			for (int i = 0; i < weight.length; i++) {
+//				for (int j = 0; j < weight[i].length; j++) {
+//					if (weight[i][j] != 0 && weight[i][j] != -1)
+//						map += "{source: '" + vertices[i] + "', target: '"
+//								+ vertices[j] + "', weight:1},";
+//				}
+//
+//			}
+
+			for (int j = 0; j < vertices.length; j++) {
+				String m = String.valueOf(j);
+				if (listOptimal != null && !listPath.contains(m)
+						&& !listOptimal.containsKey(j)
+						&& vertices[j] != targetLabel)
+					w += "{category:1, name: '" + vertices[j] + "',value : 3},";
+				else if (listOptimal == null && !listPath.contains(m)
+						&& vertices[j] != targetLabel) {
+					w += "{category:1, name: '" + vertices[j] + "',value : 3},";
+				}
+			}
+		}
+
+		return map;
+	}
+
+}

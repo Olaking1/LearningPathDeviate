@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="" method="post" id="demoForm">
+	请输入用户名：</br>
+	<input type="text" length=20" name="userID" id="userID" class="txt"></input><br/>
+	请输入密码：</br>
+	<input type="password" length=20 id="password" name="password" class="txt"></input><br/>
+	<input type="submit" value="登录" id="button">
+	</form>
+	<script src="jquery/jquery-2.1.4.js"></script>
+	<script src="jquery/jquery.validate.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$("#demoForm").validate({
+			rules:{
+				userID:{
+				//	required:true,
+			//		minlength:2,
+					maxlength:10
+				},
+				password:{
+				//	required:true,
+				//	minlength:2,
+					maxlength:10
+				},
+			},
+			messages:{
+				userID:{
+					//required:"请输入用户名",
+					//minlength:"最小长度为2",
+					maxlength:"最大长度为10"
+				},
+				password:{
+					//required:"请输入用户名",
+					//minlength:"最小长度为2",
+					maxlength:"最大长度为10"
+				}
+			},
+		});
+		
+		
+	});
+	
+	
+		
+	</script>
+	
+</body>
+</html>
